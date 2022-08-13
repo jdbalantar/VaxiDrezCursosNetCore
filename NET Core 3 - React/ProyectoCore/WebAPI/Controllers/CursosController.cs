@@ -10,14 +10,8 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CursosController : ControllerBase
+    public class CursosController : MiControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public CursosController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
 
         /// <summary>
         /// Método que devuelve una lista de cursos
@@ -28,33 +22,33 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Curso>>> Lista()
         {
-            return await _mediator.Send(new Consulta.ListaCursos());
+            return await Mediator.Send(new Consulta.ListaCursos());
         }
 
 
-        [HttpGet("{Id:int}")]
+        [HttpGet("{Id}")]
         public async Task<ActionResult<Curso>> Curso(int id){
         
-            return await _mediator.Send(new ConsultaId.CursoUnico{Id = id});
+            return await Mediator.Send(new ConsultaId.CursoUnico{Id = id});
         }
 
         [HttpPost]
         public async Task<ActionResult<Unit>> Crear(Nuevo.Ejecuta data)
         {
-            return await _mediator.Send(data);
+            return await Mediator.Send(data);
         }
 
-        [HttpPut("{Id:int}")]
+        [HttpPut("{Id}")]
         public async Task<ActionResult<Unit>> Editar(int id, Editar.Ejecuta data)
         {
             data.CursoId = id;
-            return await _mediator.Send(data);
+            return await Mediator.Send(data);
         }
 
-        [HttpDelete("{Id:int}")]
+        [HttpDelete("{Id}")]
         public async Task<ActionResult<Unit>> Eliminar(int id)
         {
-            return await _mediator.Send(new Eliminar.Ejecuta{Id = id});
+            return await Mediator.Send(new Eliminar.Ejecuta{Id = id});
         }
     }
 }
