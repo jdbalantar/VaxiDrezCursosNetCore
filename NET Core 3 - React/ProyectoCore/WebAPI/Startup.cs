@@ -1,4 +1,5 @@
 using Aplicacion.Cursos;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,7 +31,7 @@ namespace WebAPI
             // Añadiendo el patrón MediatR
             services.AddMediatR(typeof(Consulta.Manejador).Assembly);
 
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Nuevo>());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

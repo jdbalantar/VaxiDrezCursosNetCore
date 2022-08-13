@@ -1,9 +1,11 @@
 ﻿using MediatR;
 using Persistencia;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using Dominio;
+using FluentValidation;
 
 namespace Aplicacion.Cursos
 {
@@ -20,6 +22,26 @@ namespace Aplicacion.Cursos
             public string Descripcion { get; set; }
             public DateTime FechaPublicacion { get; set; }
         }
+
+
+        /// <summary>
+        /// Clase que valida las propiedades de la clase Ejecuta - Query.
+        /// FluentValidation
+        /// </summary>
+        public class EjecutaValidacion : AbstractValidator<Ejecuta>
+        {
+            /// <summary>
+            /// En este constructor van las reglas de validación.
+            /// </summary>
+            public EjecutaValidacion()
+            {
+                // Con esto hago que sea obligatorio
+                RuleFor(x => x.Titulo).NotEmpty();
+                RuleFor(x => x.Descripcion).NotEmpty();
+                RuleFor(x => x.FechaPublicacion).NotEmpty();
+            }
+        }
+
 
         /// <summary>
         /// Clase que representa la lógica de la inserción
