@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Persistencia;
+using WebAPI.Middleware;
 
 namespace WebAPI
 {
@@ -36,9 +37,12 @@ namespace WebAPI
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // Usando el Middleware para manejar las excepciones en el servidor
+            app.UseMiddleware<ManejadorErrorMiddleware>();
+
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
             }
 
             // app.UseHttpsRedirection();

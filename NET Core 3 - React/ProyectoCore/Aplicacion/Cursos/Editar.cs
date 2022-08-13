@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using Persistencia;
+using System;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using Aplicacion.ManejadorError;
 
 namespace Aplicacion.Cursos
 {
@@ -45,7 +45,8 @@ namespace Aplicacion.Cursos
             {
                 var curso = await _context.Curso.FindAsync(request.CursoId);
                 if (curso == null)
-                    throw new Exception("Curso no encontrado");
+                    // Haciendo uso de la Excepción ManejadorExcepcion, para cuando haya un error en el API
+                    throw new ManejadorExcepcion(HttpStatusCode.NotFound, new { curso = "No se encontró el curso" });
 
                 // Si no le estoy enviando nada, no actualice, déjelo igual
                 curso.Titulo = request.Titulo ?? curso.Titulo;

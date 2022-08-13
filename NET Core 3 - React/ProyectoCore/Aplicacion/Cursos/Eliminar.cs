@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Aplicacion.ManejadorError;
 using MediatR;
+using Persistencia;
+using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Persistencia;
 
 namespace Aplicacion.Cursos
 {
@@ -24,8 +26,11 @@ namespace Aplicacion.Cursos
             public async Task<Unit> Handle(Ejecuta request, CancellationToken cancellationToken)
             {
                 var curso = await _context.Curso.FindAsync(request.Id);
+
                 if (curso == null)
-                    throw new Exception("No se puede eliminar el curso");
+                    // Haciendo uso de la Excepción ManejadorExcepcion, para cuando haya un error en el API
+                    throw new ManejadorExcepcion(HttpStatusCode.NotFound, new { curso = "No se encontró el curso" });
+
                 _context.Remove(curso);
                 var value = await _context.SaveChangesAsync();
                 if (value > 0)
@@ -33,7 +38,7 @@ namespace Aplicacion.Cursos
                     return Unit.Value;
                 }
 
-                throw new Exception("No se pudieron guardar los cambios");
+                throw new Exception("No se pudo modificar el curso");
             }
         }
     }

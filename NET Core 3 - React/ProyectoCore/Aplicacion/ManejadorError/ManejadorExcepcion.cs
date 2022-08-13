@@ -6,12 +6,13 @@ using System.Text;
 namespace Aplicacion.ManejadorError
 {
     /// <summary>
-    /// 
+    /// Estclase manejara los errores de tipo REST. Es decir, cuando FluentValidation detecte un error
+    /// esta será la clase que será invocada para lanzar la excepción
     /// </summary>
     public class ManejadorExcepcion : Exception
     {
         /// <summary>
-        /// 
+        /// Contiene los valores de los códigos de estado definidos para HTTP.
         /// </summary>
         public HttpStatusCode _codigo { get; }
 

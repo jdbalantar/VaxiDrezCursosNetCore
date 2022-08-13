@@ -15,20 +15,20 @@ namespace WebAPI.Middleware
     public class ManejadorErrorMiddleware
     {
         /// <summary>
-        /// 
+        /// Parámetro que contiene la información de los Middleware
         /// </summary>
         private readonly RequestDelegate _next;
 
         /// <summary>
-        /// 
+        /// Parámetro que se usa para añadir errores e información al Log
         /// </summary>
         private readonly ILogger<ManejadorErrorMiddleware> _logger;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="next"></param>
-        /// <param name="logger"></param>
+        /// <param name="next">Parámetro que contiene la información de los Middleware</param>
+        /// <param name="logger">Parámetro que se usa para añadir errores e información al Log</param>
         public ManejadorErrorMiddleware(RequestDelegate next, ILogger<ManejadorErrorMiddleware> logger)
         {
             _next = next;
@@ -44,7 +44,7 @@ namespace WebAPI.Middleware
         /// </summary>
         /// <param name="context">En el contexto van todos los parámetros, data y requerimientos que el usuario requiere de la API</param>
         /// <returns></returns>
-        public async Task Invocar(HttpContext context)
+        public async Task Invoke(HttpContext context)
         {
             try
             {
@@ -63,9 +63,9 @@ namespace WebAPI.Middleware
         /// Por otro lado, si el error es genérico, es decir, si hay un error en el código, no se le mostrará esta excepción
         /// al usuario, sino que se 
         /// </summary>
-        /// <param name="context"></param>
-        /// <param name="ex"></param>
-        /// <param name="logger"></param>
+        /// <param name="context">En el contexto van todos los parámetros, data y requerimientos que el usuario requiere de la API</param>
+        /// <param name="ex">El tipo de excepción que se captura</param>
+        /// <param name="logger">Parámetro que se usa para añadir errores e información al Log</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         private async Task ManejadorExcepcionAsincrono(HttpContext context, Exception ex, ILogger<ManejadorErrorMiddleware> logger)
@@ -77,7 +77,7 @@ namespace WebAPI.Middleware
                 case ManejadorExcepcion me:
                     logger.LogError(ex, "Manejador Error");
                     errores = me._errores;
-                    context.Response.StatusCode = (int) me._codigo;
+                    context.Response.StatusCode = (int)me._codigo;
                     break;
                 case Exception e:
                     logger.LogError(ex, "Error de Servidor");
@@ -87,7 +87,7 @@ namespace WebAPI.Middleware
             context.Response.ContentType = "application/json";
             if (errores != null)
             {
-                string resultados = JsonConvert.SerializeObject(new {errores});
+                string resultados = JsonConvert.SerializeObject(new { errores });
                 await context.Response.WriteAsync(resultados);
             }
         }
