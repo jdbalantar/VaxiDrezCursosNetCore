@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Aplicacion.Contratos;
 
 namespace Aplicacion.Seguridad
 {
@@ -30,16 +31,18 @@ namespace Aplicacion.Seguridad
         {
             private readonly UserManager<Usuario> _userManager;
             private readonly SignInManager<Usuario> _signInManager;
+            private readonly IJwtGenerador _jwtGenerador;
 
             /// <summary>
             /// 
             /// </summary>
             /// <param name="userManager">Este es el "contexto" pero de los usuarios. Tiene la inforamción de todos los usuarios de Net Core Identity</param>
             /// <param name="signInManager">Objeto para iniciar sesión</param>
-            public Manejador(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager)
+            public Manejador(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, IJwtGenerador jwtGenerador)
             {
                 _userManager = userManager;
                 _signInManager = signInManager;
+                _jwtGenerador = jwtGenerador;
             }
 
             /// <summary>
@@ -56,7 +59,7 @@ namespace Aplicacion.Seguridad
                 if (usuario == null)
                 {
                     // Si el usuario no existe, lanzamos una excepción (No se encontró, desautorizado, etc)
-                    throw new ManejadorExcepcion(HttpStatusCode.Unauthorized, new {usuario = "Este usuario no tiene permisos para ingresar a la aplicación"});
+                    throw new ManejadorExcepcion(HttpStatusCode.Unauthorized, new { usuario = "Este usuario no tiene permisos para ingresar a la aplicación" });
                 }
 
                 // Si se encontró al usuario, intente iniciar sesión con el usuario que llegó, y le pasamos la contraseña que llegó por el controller
@@ -70,7 +73,7 @@ namespace Aplicacion.Seguridad
                         NombreCompleto = usuario.NombreCompleto,
                         Email = usuario.Email,
                         UserName = usuario.UserName,
-                        Token = "Esta será la data del Token",
+                        Token = _jwtGenerador.CrearToken(usuario),
                         Imagen = null
                     };
                 }

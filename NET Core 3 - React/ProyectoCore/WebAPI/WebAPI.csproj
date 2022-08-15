@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.28" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.28">
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		  <PrivateAssets>all</PrivateAssets>
@@ -10,6 +11,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Aplicacion\Aplicacion.csproj" />
+		<ProjectReference Include="..\Seguridad\Seguridad.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup>

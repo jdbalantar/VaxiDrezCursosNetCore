@@ -1,15 +1,13 @@
-﻿using Dominio;
+﻿using Aplicacion.Cursos;
+using Dominio;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Aplicacion.Cursos;
-using Microsoft.AspNetCore.Routing;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class CursosController : MiControllerBase
     {
 
