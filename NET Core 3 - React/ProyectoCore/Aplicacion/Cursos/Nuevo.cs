@@ -1,12 +1,11 @@
-﻿using MediatR;
+﻿using Dominio;
+using FluentValidation;
+using MediatR;
 using Persistencia;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
-using Dominio;
-using FluentValidation;
 
 namespace Aplicacion.Cursos
 {
@@ -61,7 +60,7 @@ namespace Aplicacion.Cursos
 
             /// <summary>
             /// Clase que implementa la lógica en la inserción de informacion hacia la BD.
-            /// En el IRequest no se le pone parámetro Curso <!-- <> -->  debido a que la clase no retorna nada.
+            /// En el IRequest no se le pone parámetro Detalle <!-- <> -->  debido a que la clase no retorna nada.
             /// Esta clase solo ejecuta una accion hacia la BD, por lo que el parámetro es la clase que Ejecuta.
             /// </summary>
             /// <param name="request"></param>
@@ -96,7 +95,7 @@ namespace Aplicacion.Cursos
                     {
                         var cursoInstructor = new CursoInstructor
                         {
-                            // Añadimos el ID que generamos para el Curso
+                            // Añadimos el ID que generamos para el Detalle
                              CursoId = _cursoId,
                              // Añadimos el Id del instructor que nos llegó
                              InstructorId = id,

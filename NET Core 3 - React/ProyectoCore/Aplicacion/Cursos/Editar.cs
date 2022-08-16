@@ -1,11 +1,15 @@
-﻿using FluentValidation;
+﻿using Aplicacion.ManejadorError;
+using FluentValidation;
 using MediatR;
 using Persistencia;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Aplicacion.ManejadorError;
+using Dominio;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aplicacion.Cursos
 {
@@ -13,10 +17,11 @@ namespace Aplicacion.Cursos
     {
         public class Ejecuta : IRequest
         {
-            public int CursoId { get; set; }
+            public Guid CursoId { get; set; }
             public string Titulo { get; set; }
             public string Descripcion { get; set; }
             public DateTime? FechaPublicacion { get; set; }
+            public List<Guid> ListaInstructores { get; set; }
         }
 
         public class EjecutaValidacion : AbstractValidator<Ejecuta>
@@ -54,6 +59,33 @@ namespace Aplicacion.Cursos
                 // Los DateTime no permiten NULL por defecto
                 // Por eso, en la clase Ejecuta, se debe especificar el parametro que permita nulos
                 curso.FechaPublicacion = request.FechaPublicacion ?? curso.FechaPublicacion;
+
+                if (request.ListaInstructores != null)
+                {
+                    if (request.ListaInstructores.Count > 0)
+                    {
+                        // Obtenemos los instructores actuales en la base de datos
+                        var instructoresBD = await _context.CursoInstructor.Where(x => x.CursoId == request.CursoId)
+                            .ToListAsync();
+                        // Eliminamos esos instructores
+                        foreach (var instructor in instructoresBD)
+                        {
+                            _context.CursoInstructor.Remove(instructor);
+                        }
+
+                        // Insertamos los que ingresa el cliente
+                        foreach (var ids in request.ListaInstructores)
+                        {
+                            var nuevoInstructor = new CursoInstructor
+                            {
+                                CursoId = request.CursoId,
+                                InstructorId = ids
+                            };
+
+                            _context.CursoInstructor.Add(nuevoInstructor);
+                        }
+                    }
+                }
 
                 var valor = await _context.SaveChangesAsync();
 

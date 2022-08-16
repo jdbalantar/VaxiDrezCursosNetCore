@@ -43,7 +43,7 @@ namespace Persistencia.Migrations
                     b.ToTable("Comentario");
                 });
 
-            modelBuilder.Entity("Dominio.Curso", b =>
+            modelBuilder.Entity("Dominio.Detalle", b =>
                 {
                     b.Property<Guid>("CursoId")
                         .ValueGeneratedOnAdd()
@@ -63,7 +63,7 @@ namespace Persistencia.Migrations
 
                     b.HasKey("CursoId");
 
-                    b.ToTable("Curso");
+                    b.ToTable("Detalle");
                 });
 
             modelBuilder.Entity("Dominio.CursoInstructor", b =>
@@ -324,7 +324,7 @@ namespace Persistencia.Migrations
 
             modelBuilder.Entity("Dominio.Comentario", b =>
                 {
-                    b.HasOne("Dominio.Curso", "Curso")
+                    b.HasOne("Dominio.Detalle", "Detalle")
                         .WithMany("ComentarioLista")
                         .HasForeignKey("CursoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -333,7 +333,7 @@ namespace Persistencia.Migrations
 
             modelBuilder.Entity("Dominio.CursoInstructor", b =>
                 {
-                    b.HasOne("Dominio.Curso", "Curso")
+                    b.HasOne("Dominio.Detalle", "Detalle")
                         .WithMany("InstructorLink")
                         .HasForeignKey("CursoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -348,7 +348,7 @@ namespace Persistencia.Migrations
 
             modelBuilder.Entity("Dominio.Precio", b =>
                 {
-                    b.HasOne("Dominio.Curso", "Curso")
+                    b.HasOne("Dominio.Detalle", "Detalle")
                         .WithOne("PrecioPromocion")
                         .HasForeignKey("Dominio.Precio", "CursoId")
                         .OnDelete(DeleteBehavior.Cascade)

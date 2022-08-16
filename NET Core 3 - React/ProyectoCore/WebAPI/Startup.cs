@@ -20,6 +20,8 @@ using Microsoft.IdentityModel.Tokens;
 using Persistencia;
 using Seguridad.TokenSeguridad;
 using System.Text;
+using Aplicacion;
+using AutoMapper;
 using WebAPI.Middleware;
 
 namespace WebAPI
@@ -93,6 +95,9 @@ namespace WebAPI
 
             // Añadiendo el servicio para obtener el usuario en sesión
             services.AddScoped<IUsuarioSesion, UsuarioSesion>();
+
+            // Añadiendo servicio de IMapper
+            services.AddAutoMapper(typeof(Consulta.Manejador));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

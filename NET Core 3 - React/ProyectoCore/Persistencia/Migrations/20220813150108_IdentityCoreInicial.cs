@@ -48,7 +48,7 @@ namespace Persistencia.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Curso",
+                name: "Detalle",
                 columns: table => new
                 {
                     CursoId = table.Column<Guid>(nullable: false),
@@ -199,7 +199,7 @@ namespace Persistencia.Migrations
                     table.ForeignKey(
                         name: "FK_Comentario_Curso_CursoId",
                         column: x => x.CursoId,
-                        principalTable: "Curso",
+                        principalTable: "Detalle",
                         principalColumn: "CursoId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -219,7 +219,7 @@ namespace Persistencia.Migrations
                     table.ForeignKey(
                         name: "FK_Precio_Curso_CursoId",
                         column: x => x.CursoId,
-                        principalTable: "Curso",
+                        principalTable: "Detalle",
                         principalColumn: "CursoId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -237,7 +237,7 @@ namespace Persistencia.Migrations
                     table.ForeignKey(
                         name: "FK_CursoInstructor_Curso_CursoId",
                         column: x => x.CursoId,
-                        principalTable: "Curso",
+                        principalTable: "Detalle",
                         principalColumn: "CursoId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -338,7 +338,7 @@ namespace Persistencia.Migrations
                 name: "Instructor");
 
             migrationBuilder.DropTable(
-                name: "Curso");
+                name: "Detalle");
         }
     }
 }
