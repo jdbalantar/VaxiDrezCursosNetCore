@@ -21,8 +21,9 @@ namespace Aplicacion.Cursos
             public string Titulo { get; set; }
             public string Descripcion { get; set; }
             public DateTime FechaPublicacion { get; set; }
-
             public List<Guid> ListaInstructor { get; set; }
+            public decimal Precio { get; set; }
+            public decimal Promocion { get; set; }
         }
 
 
@@ -103,6 +104,19 @@ namespace Aplicacion.Cursos
                         _context.CursoInstructor.Add(cursoInstructor);
                     }
                 }
+
+                // Lógica para insertar un precio del curso
+
+                Guid _precioId = Guid.NewGuid();
+                var precioEntidad = new Precio
+                {
+                    CursoId = _cursoId,
+                    PrecioActual = request.Precio,
+                    Promocion = request.Promocion,
+                    PrecioId = _precioId
+                };
+
+                _context.Precio.Add(precioEntidad);
 
                 // Si el valor que devuelve el método es 0, es porque hubo un error
                 // Si devuelve un valor superior a 1, es porque se guardó la información
