@@ -22,6 +22,8 @@ namespace Aplicacion.Cursos
             public string Descripcion { get; set; }
             public DateTime? FechaPublicacion { get; set; }
             public List<Guid> ListaInstructores { get; set; }
+            public Decimal? Precio { get; set; }
+            public Decimal? Promocion { get; set; }
         }
 
         public class EjecutaValidacion : AbstractValidator<Ejecuta>
@@ -59,6 +61,29 @@ namespace Aplicacion.Cursos
                 // Los DateTime no permiten NULL por defecto
                 // Por eso, en la clase Ejecuta, se debe especificar el parametro que permita nulos
                 curso.FechaPublicacion = request.FechaPublicacion ?? curso.FechaPublicacion;
+
+
+                /* Lógica para editar Precio */
+
+                var precioEntidad = await _context.Precio.Where(x => x.CursoId == curso.CursoId).FirstOrDefaultAsync();
+
+                if (precioEntidad != null)
+                {
+                    precioEntidad.Promocion = request.Promocion ?? precioEntidad.Promocion;
+                    precioEntidad.PrecioActual = request.Precio ?? precioEntidad.PrecioActual;
+                }
+                else
+                {
+                    precioEntidad = new Precio
+                    {
+                        PrecioId = Guid.NewGuid(),
+                        PrecioActual = request.Precio ?? 0,
+                        Promocion = request.Promocion ?? 0,
+                        CursoId = curso.CursoId
+                    };
+                    await _context.Precio.AddAsync(precioEntidad);
+                }
+
 
                 if (request.ListaInstructores != null)
                 {

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aplicacion.Cursos
 {
@@ -27,12 +28,25 @@ namespace Aplicacion.Cursos
             public async Task<Unit> Handle(Ejecuta request, CancellationToken cancellationToken)
             {
                 // Eliminamos primero todas las referencias que tenga el curso
+                // Comentarios, Precios, Instructores, etc
 
                 var instructorDB = _context.CursoInstructor.Where(x => x.CursoId == request.Id);
                 foreach (var instructor in instructorDB)
                 {
                     _context.CursoInstructor.Remove(instructor);
                 }
+
+                /* Lógica para eliminar los comentarios asignados al curso que se va a eliminar */
+                var comentariosDB = _context.Comentario.Where(x => x.CursoId == request.Id);
+                foreach (var comentario in comentariosDB)
+                {
+                    _context.Comentario.Remove(comentario);
+                }
+
+                /* Lógica para eliminar el precio al curso que se va a eliminar */
+                var precioDB = await _context.Precio.Where(x => x.CursoId == request.Id).FirstOrDefaultAsync();
+                if (precioDB != null)
+                    _context.Precio.Remove(precioDB);
 
                 var curso = await _context.Curso.FindAsync(request.Id);
 
